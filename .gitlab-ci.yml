@@ -1,0 +1,43 @@
+image: nikolaik/python-nodejs:latest
+
+.setupEnvironment: &setupEnvironment |
+  cp "$ENV" .env
+
+.installLibrary: &installLibrary |
+  yarn
+
+.buildProduction: &buildProduction |
+  yarn build
+
+.buildDevelopment: &buildDevelopment |
+  yarn build
+
+.uploadToS3: &uploadToS3 |
+  pip install awscli
+  aws s3 cp ./build/ s3://$S3_BUCKET_NAME/ --recursive --include "*"
+  aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/index.html"
+
+Deploy to production:
+  environment:
+    name: production
+  stage: deploy
+  only:
+    - production
+  script:
+    - *setupEnvironment
+    - *installLibrary
+    - *buildProduction
+    - *uploadToS3
+
+Deploy to staging:
+  environment:
+    name: develop
+  stage: deploy
+  only:
+    - develop
+  script:
+    - source "$KEYS"
+    - *setupEnvironment
+    - *installLibrary
+    - *buildDevelopment
+    - *uploadToS3
