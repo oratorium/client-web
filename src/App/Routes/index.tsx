@@ -14,11 +14,12 @@ const isSignedIn = (store: AppStore) => !!store.Self.id;
 const isNonSignedIn = (store: AppStore) => !store.Self.id;
 
 const RedirectionToHome = () => <Redirect to={HOME} />;
+const RedirectionToSignIn = () => <Redirect to={SIGN_IN} />;
 
 export const Routes = () => (
   <Suspense fallback={null}>
     <Switch>
-      <AuthRoute path={HOME} exact={true} component={Home} fallback={Home.RedirectionToSignIn} isAuthorized={isSignedIn} />
+      <AuthRoute path={HOME} exact={true} component={Home} fallback={RedirectionToSignIn} isAuthorized={isSignedIn} />
       <AuthRoute path={SIGN_IN} exact={true} component={SignIn} fallback={RedirectionToHome} isAuthorized={isNonSignedIn} />
       <AuthRoute path={SIGN_UP} exact={true} component={SignUp} fallback={RedirectionToHome} isAuthorized={isNonSignedIn} />
       <AuthRoute path={RESET_PASSWORD} exact={true} component={ResetPassword} fallback={RedirectionToHome} isAuthorized={isNonSignedIn} />
