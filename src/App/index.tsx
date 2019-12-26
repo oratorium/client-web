@@ -3,9 +3,12 @@ import { BrowserRouter } from "react-router-dom";
 
 import "./styles";
 import { Routes } from "./Routes";
+import { AppStoreProvider } from "./Store";
 
 export const App = () => (
   <BrowserRouter>
-    <Routes />
+    <AppStoreProvider>
+      <Routes />
+    </AppStoreProvider>
   </BrowserRouter>
 );
