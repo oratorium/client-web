@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { Button } from "App/Atomics/Button";
 import { InputText } from "App/Atomics/InputText";
 import { Link } from "App/Atomics/Link";
 import { RESET_PASSWORD, SIGN_UP } from "constants/routes";
+import { useEmail } from "hooks/useEmail";
+import { usePassword } from "hooks/usePassword";
 
 const Layout = styled.div`
   display: grid;
@@ -45,41 +47,17 @@ const Layout = styled.div`
   }
 `;
 
-const NONE = "";
-
-const createInfo = () => ({ value: NONE, error: NONE });
-
 export const SignIn = () => {
-  const [emailInfo, setEmailInfo] = useState(createInfo);
-  const [passwordInfo, setPasswordInfo] = useState(createInfo);
+  const [emailInfo, dispatchEmailInfo] = useEmail();
+  const [passwordInfo, dispatchPasswordInfo] = usePassword();
 
-  const isValidateEmail = (email: string) => {
-    const pattern = /.+@.+\..+/;
-    return pattern.test(email);
-  };
-  const isValidatePassword = (password: string) => {
-    const pattern = /[a-z0-9]{12,}/;
-    return pattern.test(password);
-  };
-
-  const updateEmail = (email: string) => {
-    if (isValidateEmail(email)) {
-      setEmailInfo(() => ({ value: email, error: NONE }));
-    } else {
-      setEmailInfo(() => ({ value: NONE, error: "이메일 형식이 올바르지 않습니다" }));
-    }
-  };
-  const updatePassword = (password: string) => {
-    if (isValidatePassword(password)) {
-      setPasswordInfo(() => ({ value: password, error: NONE }));
-    } else {
-      setPasswordInfo(() => ({ value: NONE, error: "비밀번호는 12자 이상이고, 알파벳과 숫자가 1개 이상이어야 합니다" }));
-    }
-  };
+  const updateEmail = (email: string) => dispatchEmailInfo({ type: "SET", email });
+  const updatePassword = (password: string) => dispatchPasswordInfo({ type: "SET", password });
 
   const tryToSignIn = () => {
-    isValidateEmail(emailInfo.value);
-    isValidatePassword(passwordInfo.value);
+    if (emailInfo.error || passwordInfo.error) {
+      window.alert("이메일 혹은 암호에 에러가 있습니다");
+    }
   };
 
   return (

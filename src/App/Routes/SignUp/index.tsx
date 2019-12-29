@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { InputText } from "App/Atomics/InputText";
+
 import { Button } from "App/Atomics/Button";
+import { InputText } from "App/Atomics/InputText";
+import { useEmail } from "hooks/useEmail";
+import { usePassword } from "hooks/usePassword";
 
 const Layout = styled.div`
   display: flex;
@@ -49,17 +52,30 @@ const Layout = styled.div`
   }
 `;
 
-export const SignUp = () => (
-  <Layout>
-    <form>
-      <strong>가입 신청</strong>
-      <label>연합원 기본 정보 입력</label>
-      <InputText placeholder="E-mail@example.com" />
-      <InputText placeholder="별명" />
-      <InputText placeholder="나이" />
-      <Button type="submit" onClick={console.log}>
-        가입 신청
-      </Button>
-    </form>
-  </Layout>
-);
+export const SignUp = () => {
+  const [emailInfo, dispatchEmailInfo] = useEmail();
+  const [passwordInfo, dispatchPasswordInfo] = usePassword();
+
+  const updateEmail = (email: string) => dispatchEmailInfo({ type: "SET", email });
+  const updatePassword = (password: string) => dispatchPasswordInfo({ type: "SET", password });
+
+  const tryToSignUp = () => {
+    if (emailInfo.error || passwordInfo.error) {
+      window.alert("이메일 혹은 암호에 에러가 있습니다");
+    }
+  };
+
+  return (
+    <Layout>
+      <form>
+        <strong>가입 신청</strong>
+        <label>연합원 기본 정보 입력</label>
+        <InputText placeholder="E-mail@example.com" onBlur={updateEmail} />
+        <InputText placeholder="별명" onBlur={updatePassword} />
+        <Button type="submit" onClick={tryToSignUp}>
+          가입 신청
+        </Button>
+      </form>
+    </Layout>
+  );
+};
