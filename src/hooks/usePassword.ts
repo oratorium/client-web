@@ -19,7 +19,7 @@ const reducer = (state: State, action: Action) => {
     case "SET": {
       const { password } = action;
       if (!isValidatePassword(password)) {
-        return { value: NONE, error: "이메일 형식이 올바르지 않습니다" };
+        return { value: NONE, error: "암호 형식이 올바르지 않습니다" };
       }
       return { value: password, error: NONE };
     }
