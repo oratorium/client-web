@@ -19,10 +19,11 @@ const Layout = styled.div`
     grid-gap: 1rem;
     align-content: center;
 
-    max-width: 240px;
+    max-width: 16rem;
     width: 100%;
 
     input {
+      margin: 0 0.5rem;
       padding: 0.5rem 0;
 
       text-align: center;
