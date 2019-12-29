@@ -32,11 +32,15 @@ const Layout = styled.div`
     }
 
     .reset-password {
-      text-align: end;
+      width: min-content;
+
+      margin-left: auto;
     }
 
     .go-to-sign-in {
-      text-align: center;
+      width: min-content;
+
+      margin: 0 auto;
     }
 
     button {
